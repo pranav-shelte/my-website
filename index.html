@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Internet Safety Awareness Quiz</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef4ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #123c69;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #cccccc;
+        }
+
+        h2 {
+            color: #123c69;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #123c69;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #205b91;
+        }
+
+        .option {
+            background-color: #e4edfa;
+            color: #222222;
+            text-align: left;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .wrong {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        footer {
+            background-color: #123c69;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Internet Safety Awareness</h1>
+    <p>Learn to Stay Safe Online!</p>
+</header>
+
+<div class="container">
+
+    <!-- Home Page -->
+
+    <div class="box" id="home">
+
+        <h2>Welcome Students!</h2>
+
+        <p>
+            Test your knowledge about internet safety
+            through this interactive quiz.
+        </p>
+
+        <p>
+            Answer each question correctly to proceed
+            to the next question.
+        </p>
+
+        <button onclick="startQuiz()">Start Quiz</button>
+
+    </div>
+
+    <!-- Quiz Section -->
+
+    <div class="box hidden" id="quiz">
+
+        <p id="progress"></p>
+
+        <h2 id="question"></h2>
+
+        <div id="options"></div>
+
+        <div id="feedback" class="hidden"></div>
+
+        <button id="next" class="hidden"
+                onclick="nextQuestion()">
+            Next Question
+        </button>
+
+        <button id="retry" class="hidden"
+                onclick="showQuestion()">
+            Try Again
+        </button>
+
+    </div>
+
+    <!-- Result Section -->
+
+    <div class="box hidden" id="result">
+
+        <h2>Quiz Completed!</h2>
+
+        <h3 id="score"></h3>
+
+        <p id="message"></p>
+
+        <button onclick="restartQuiz()">
+            Try Again
+        </button>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>Internet Safety Awareness Among Students</p>
+    <p>B.Sc. Computer Science | Semester III</p>
+    <p>Academic Year 2026-27</p>
+</footer>
+
+<script>
+
+const questions = [
+
+    {
+        question: "You receive a message saying you won ₹50,000. It asks for your bank details. What should you do?",
+
+        options: [
+            "Click the link immediately",
+            "Enter your bank details",
+            "Avoid the link and verify the message"
+        ],
+
+        answer: 2,
+
+        solution: "This may be a phishing scam. Never enter banking details on an unverified website. Check the offer using the organisation's official website."
+    },
+
+    {
+        question: "A stranger asks you to share your OTP. What should you do?",
+
+        options: [
+            "Share the OTP",
+            "Never share the OTP",
+            "Share it if the person sounds trustworthy"
+        ],
+
+        answer: 1,
+
+        solution: "Never share your OTP with anyone. Someone may use it to access your account or authorise a transaction."
+    },
+
+    {
+        question: "Which is the safest password?",
+
+        options: [
+            "12345678",
+            "Your name and birth year",
+            "A long and unique password"
+        ],
+
+        answer: 2,
+
+        solution: "Use a long, unique password that is difficult to guess. Enable two-factor authentication when available."
+    },
+
+    {
+        question: "Someone is cyberbullying your classmate. What should you do?",
+
+        options: [
+            "Join the bullying",
+            "Report it and seek help from a trusted adult",
+            "Share the post with everyone"
+        ],
+
+        answer: 1,
+
+        solution: "Do not encourage cyberbullying. Save relevant evidence, report the content and seek help from a trusted adult."
+    },
+
+    {
+        question: "You receive an attachment from an unknown sender. What should you do?",
+
+        options: [
+            "Open it immediately",
+            "Forward it to friends",
+            "Avoid opening it and verify the sender"
+        ],
+
+        answer: 2,
+
+        solution: "Unknown attachments may contain malware. Verify the sender before opening unexpected files."
+    },
+
+    {
+        question: "A stranger online asks for your home address. What should you do?",
+
+        options: [
+            "Share your address",
+            "Post it publicly",
+            "Keep your personal information private"
+        ],
+
+        answer: 2,
+
+        solution: "Sharing your address with strangers can put your privacy and safety at risk. Keep personal details private."
+    },
+
+    {
+        question: "You entered your bank details on a suspicious website. What should you do?",
+
+        options: [
+            "Ignore the incident",
+            "Contact your bank immediately and report suspected fraud",
+            "Share the website with friends"
+        ],
+
+        answer: 1,
+
+        solution: "Contact your bank through its official channel immediately. Secure your account and report suspected financial cyber fraud. In India, the helpline for financial cyber fraud is 1930."
+    },
+
+    {
+        question: "What should you do before installing an unknown app?",
+
+        options: [
+            "Install it immediately",
+            "Check its source and permissions",
+            "Disable your security settings"
+        ],
+
+        answer: 1,
+
+        solution: "Use trusted app stores, check the developer and permissions, and keep your device updated."
+    },
+
+    {
+        question: "Which is safer when accessing your bank account?",
+
+        options: [
+            "Using any unknown public Wi-Fi",
+            "Sharing your password with a friend",
+            "Using a trusted network and the official banking app"
+        ],
+
+        answer: 2,
+
+        solution: "Prefer mobile data or a trusted network for sensitive transactions. Use your bank's official app or website."
+    },
+
+    {
+        question: "A website asks for your password through a suspicious message link. What should you do?",
+
+        options: [
+            "Enter your password",
+            "Open the official website directly and verify the message",
+            "Send your password to the sender"
+        ],
+
+        answer: 1,
+
+        solution: "The link may lead to a fake website. Do not enter your password. Visit the official website directly and secure your account if you already shared your credentials."
+    }
+
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+
+// Start Quiz
+
+function startQuiz() {
+
+    current = 0;
+    score = 0;
+
+    document.getElementById("home").classList.add("hidden");
+
+    document.getElementById("result").classList.add("hidden");
+
+    document.getElementById("quiz").classList.remove("hidden");
+
+    showQuestion();
+
+}
+
+
+// Display Question
+
+function showQuestion() {
+
+    answered = false;
+
+    let q = questions[current];
+
+    document.getElementById("progress").innerText =
+        "Question " + (current + 1) +
+        " of " + questions.length;
+
+    document.getElementById("question").innerText =
+        q.question;
+
+    document.getElementById("feedback").className = "hidden";
+
+    document.getElementById("next").classList.add("hidden");
+
+    document.getElementById("retry").classList.add("hidden");
+
+    let optionsDiv = document.getElementById("options");
+
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach(function(option, index) {
+
+        let button = document.createElement("button");
+
+        button.innerText =
+            String.fromCharCode(65 + index) + ". " + option;
+
+        button.className = "option";
+
+        button.onclick = function() {
+            checkAnswer(index);
+        };
+
+        optionsDiv.appendChild(button);
+
+    });
+
+}
+
+
+// Check Answer
+
+function checkAnswer(selected) {
+
+    if (answered) {
+        return;
+    }
+
+    let q = questions[current];
+
+    let feedback = document.getElementById("feedback");
+
+    feedback.classList.remove("hidden");
+
+    if (selected === q.answer) {
+
+        answered = true;
+
+        score++;
+
+        feedback.className = "correct";
+
+        feedback.innerHTML =
+            "<b>Correct Answer!</b><br>" +
+            "Well done! You chose the safe action.";
+
+        document.getElementById("options").innerHTML = "";
+
+        document.getElementById("next").classList.remove("hidden");
+
+        if (current === questions.length - 1) {
+
+            document.getElementById("next").innerText =
+                "View Final Score";
+
+        } else {
+
+            document.getElementById("next").innerText =
+                "Next Question";
+
+        }
+
+    } else {
+
+        feedback.className = "wrong";
+
+        feedback.innerHTML =
+            "<b>Incorrect Answer!</b><br><br>" +
+            "<b>Correct Answer:</b> " +
+            q.options[q.answer] +
+            "<br><br><b>Solution and What to Do:</b><br>" +
+            q.solution;
+
+        document.getElementById("retry").classList.remove("hidden");
+
+    }
+
+}
+
+
+// Next Question
+
+function nextQuestion() {
+
+    current++;
+
+    if (current < questions.length) {
+
+        showQuestion();
+
+    } else {
+
+        showResult();
+
+    }
+
+}
+
+
+// Show Final Score
+
+function showResult() {
+
+    document.getElementById("quiz").classList.add("hidden");
+
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("score").innerText =
+        "Your Score: " + score + " / " + questions.length;
+
+    if (score === 10) {
+
+        document.getElementById("message").innerText =
+            "Excellent! You understand internet safety very well.";
+
+    } else if (score >= 7) {
+
+        document.getElementById("message").innerText =
+            "Good job! Keep learning about internet safety.";
+
+    } else {
+
+        document.getElementById("message").innerText =
+            "Keep practising and read the safety explanations carefully.";
+
+    }
+
+}
+
+
+// Restart Quiz
+
+function restartQuiz() {
+
+    document.getElementById("result").classList.add("hidden");
+
+    document.getElementById("home").classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
